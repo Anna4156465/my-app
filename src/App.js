@@ -1,42 +1,25 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import { createTheme } from '@mui/material/styles';
-import { AppProvider } from '@toolpad/core/AppProvider';
-import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+//React, toolpad  & MUI imports:
 import { DemoProvider, useDemoRouter } from '@toolpad/core/internal';
+import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+import { AppProvider } from '@toolpad/core/AppProvider';
+import { createTheme } from '@mui/material/styles';
+import { Box } from '@mui/material';
+import { useContext } from 'react';
+
+//Import the context for the global variables:
+import UserContext from './index';
+
+//MUI icons imports:
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import GroupIcon from '@mui/icons-material/Group';
 import PetsIcon from '@mui/icons-material/Pets';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
-// Import pages
+//Import pages
 import Users from './pages/Users';
 import Pets from './pages/Pets';
 import Appointments from './pages/Appointments';
 
-
-const NAVIGATION = [
-  {
-    kind: 'header',
-    title: 'Main items',
-  },
-  {
-    segment: 'users',
-    title: 'Empleados',
-    icon: <GroupIcon />,
-  },
-  {
-    segment: 'pets',
-    title: 'Mascotas',
-    icon: <PetsIcon />,
-  },
-  {
-    segment: 'appointments',
-    title: 'Citas',
-    icon: <CalendarMonthIcon />,
-  },
-];
-
+//Theme & styles:
 const demoTheme = createTheme({
   cssVariables: {
     colorSchemeSelector: 'data-toolpad-color-scheme',
@@ -53,24 +36,51 @@ const demoTheme = createTheme({
   },
 });
 
-function getPageComponent(pathname) {
-  const path = pathname.slice(1); // Remove leading slash
-  switch (path) {
-    case 'users':
-      return <Users />;
-    case 'pets':
-      return <Pets />;
-    case 'appointments':
-      return <Appointments />;
-    default:
-      return <Users />;
-  }
-}
-
 function DashboardLayoutBasic(props) {
   const { window } = props;
+  const { rol } = useContext(UserContext);
   const router = useDemoRouter('/dashboard');
   const demoWindow = window !== undefined ? window() : undefined;
+
+  //List of tabs:
+  const NAVIGATION = [
+    {
+      kind: 'header',
+      title: 'Main items',
+    },
+    {
+      segment: 'pets',
+      title: 'Mascotas',
+      icon: <PetsIcon />,
+    },
+    {
+      segment: 'appointments',
+      title: 'Citas',
+      icon: <CalendarMonthIcon />,
+    },
+  ];
+
+  //Add only admin tabs:
+  if (rol === "admin") {
+    NAVIGATION.push({
+      segment: 'users',
+      title: 'Empleados',
+      icon: <GroupIcon />,
+    })
+  }
+
+  //Connect the pages to the tabs:
+  function getPageComponent(pathname) {
+    const path = pathname.slice(1);
+    switch (path) {
+      case 'users':
+        return <Users />;
+      case 'pets':
+        return <Pets />;
+      case 'appointments':
+        return <Appointments />;
+    }
+  }
 
   return (
     <DemoProvider window={demoWindow}>
@@ -89,9 +99,5 @@ function DashboardLayoutBasic(props) {
     </DemoProvider>
   );
 }
-
-DashboardLayoutBasic.propTypes = {
-  window: PropTypes.func,
-};
 
 export default DashboardLayoutBasic;

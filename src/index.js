@@ -1,24 +1,36 @@
-import React from 'react';
+//React imports:
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { useState, createContext } from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+
+//Pages imports:
 import App from './App';
 import Login from './pages/Login'
-import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-     <BrowserRouter>
+//Create context for global variables:
+const UserContext = createContext();
+
+//Configure the context_
+const MyProvider = () => {
+  const [rol, setRol] = useState("");
+
+  return (
+    <UserContext.Provider value={{ rol, setRol }}>
+      <BrowserRouter>
         <Routes>
           <Route path="" element={<Login />} />
           <Route path="/app/" element={<App />} />
         </Routes>
       </BrowserRouter>
+    </UserContext.Provider>
+  );
+};
+export default UserContext;
+
+//Render the page:
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <MyProvider />
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
