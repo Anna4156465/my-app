@@ -53,12 +53,12 @@ export default function Users() {
 
   //Columns of the table:
   const COLUMNS = [
-    { id: 'dni', label: 'DNI', minWidth: 100 },
-    { id: 'name', label: 'Nombre', minWidth: 100, },
-    { id: 'surnames', label: 'Apellido', minWidth: 100, },
-    { id: 'rol', label: 'Rol', minWidth: 100 },
-    { id: 'mail', label: 'Mail', minWidth: 100 },
-    { id: 'phone', label: 'Phone', minWidth: 100 },
+    { id: 'dni', label: 'DNI', minWidth: 50 },
+    { id: 'name', label: 'Nombre', minWidth: 50, },
+    { id: 'surnames', label: 'Apellido', minWidth: 50, },
+    { id: 'rol', label: 'Rol', minWidth: 50 },
+    { id: 'mail', label: 'Correo', minWidth: 50 },
+    { id: 'phone', label: 'Teléfono', minWidth: 50 }
   ];
 
   //Do this when the page load:
@@ -117,7 +117,7 @@ export default function Users() {
         mode: 'cors',
         body: JSON.stringify(DATA)
       });
-      //Save data:
+      //Save and upload data:
       if (response.status === 201) {
         setData([...data, DATA]);
         setSnack({ open: true, message: "Usuario creado!" });
@@ -126,6 +126,22 @@ export default function Users() {
       else if (response.status == 409) {
         setSnack({ open: true, message: "El usuario ya existe!" });
       }
+    } catch (error) { console.error('Error al obtener datos de la API:', error); }
+  }
+
+  async function deleteUser(dni) {
+    try {
+      //Do the call:
+      const response = await fetch('http://localhost:5001/api/v1/users/' + dni, {
+        method: 'DELETE',
+        credentials: "include",
+      });
+      //Upload data:
+      if (response.status === 200) {
+        setData(data.filter((item) => item.dni !== dni));
+        setSnack({ open: true, message: "Usuario eliminado!" });
+      }
+      else setSnack({ open: true, message: "Ha habido un error!" });
     } catch (error) { console.error('Error al obtener datos de la API:', error); }
   }
 
@@ -157,6 +173,7 @@ export default function Users() {
               {column.label}
             </TableCell>
           ))}
+          <TableCell key={999}> Acciones </TableCell>
         </TableHead>
         <TableBody>
           {data.length > 0 && data.map((row) => {
@@ -172,6 +189,9 @@ export default function Users() {
                     </TableCell>
                   );
                 })}
+                <TableCell key={999}>
+                  <Button color="error" onClick={() => deleteUser(row.dni)}> Borrar! </Button>
+                </TableCell>
               </TableRow>
             );
           })}
