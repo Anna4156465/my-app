@@ -37,7 +37,7 @@ export default function Users() {
   //Data for the new user (crate user):
   const [dni, setDni] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [surname, setSurname] = React.useState("");
+  const [surnames, setSurname] = React.useState("");
   const [name, setName] = React.useState("");
   const [rol, setRol] = React.useState("");
   const [mail, setMail] = React.useState("");
@@ -73,7 +73,6 @@ export default function Users() {
         credentials: 'include'
       });
       const jsonData = await response.json();
-      console.log("eyy", jsonData);
       setData(jsonData);
     } catch (error) {
       console.error('Error al obtener datos de la API:', error);
@@ -81,7 +80,28 @@ export default function Users() {
   }
 
   async function createUser() {
-    //TODO
+    //Prepare body to send:
+    const DATA = {
+      dni: dni,
+      password: password,
+      surnames: surnames,
+      rol: rol,
+      mail: mail,
+      phone: phone,
+      admission_date: date
+    };
+
+    try {
+      const response = await fetch('http://localhost:5001/api/v1/users/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: "include",
+        mode: 'cors',
+        body: JSON.stringify(DATA)
+      });
+      //Save data:
+      console.log("eey", response);
+    } catch (error) { console.error('Error al obtener datos de la API:', error); }
   }
 
   return (
@@ -167,7 +187,7 @@ export default function Users() {
             <Grid size={6}>
               <TextField
                 label="Apellido"
-                value={surname}
+                value={surnames}
                 size="small"
                 onChange={(e) => setSurname(e.target.value)}
               />
@@ -201,6 +221,7 @@ export default function Users() {
                 label="Date"
                 value={date}
                 size="small"
+                type="date"
                 onChange={(e) => setDate(e.target.value)}
               />
             </Grid>
