@@ -1,4 +1,5 @@
 //React & MUI imports:
+import Snackbar from '@mui/material/Snackbar';
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -47,6 +48,9 @@ export default function Users() {
   //Trigger for the create user pop-up:
   const [open, setOpen] = React.useState(false);
 
+  //Toggle show notification:
+  const [snack, setSnack] = useState(false);
+
   //Columns of the table:
   const COLUMNS = [
     { id: 'dni', label: 'DNI', minWidth: 100 },
@@ -64,14 +68,26 @@ export default function Users() {
 
   //Handle functions for the pop-up:
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setDni("");
+    setPassword("");
+    setSurname("");
+    setName("");
+    setRol("");
+    setMail("");
+    setPhone("");
+    setDate("");
+  };
 
   async function getUsers() {
     try {
+      //Do the call:
       const response = await fetch('http://localhost:5001/api/v1/users', {
         method: 'GET',
         credentials: 'include'
       });
+      //Save data:
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {
@@ -91,10 +107,9 @@ export default function Users() {
       phone: phone,
       admission_date: date
     };
-    console.log("eyy", DATA);
-
 
     try {
+      //Do the call:
       const response = await fetch('http://localhost:5001/api/v1/users/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -103,7 +118,14 @@ export default function Users() {
         body: JSON.stringify(DATA)
       });
       //Save data:
-      console.log("eeyy", response);
+      if (response.status === 201) {
+        setData([...data, DATA]);
+        setSnack({ open: true, message: "Usuario creado!" });
+        handleClose();
+      }
+      else if (response.status == 409) {
+        setSnack({ open: true, message: "El usuario ya existe!" });
+      }
     } catch (error) { console.error('Error al obtener datos de la API:', error); }
   }
 
@@ -161,91 +183,109 @@ export default function Users() {
         <Box sx={style}>
           {/*Title*/}
           <Typography variant="h6" sx={{ marginBottom: "10px" }}>Create user</Typography>
-          {/*Inputs*/}
-          <Grid container spacing={1}>
-            <Grid item size={6}>
-              <TextField
-                label="DNI"
-                value={dni}
-                size="small"
-                onChange={(e) => setDni(e.target.value)}
-              />
-            </Grid>
-            <Grid size={6}>
-              <TextField
-                label="Contraseña"
-                value={password}
-                size="small"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Grid>
-            <Grid size={6}>
-              <TextField
-                label="Nombre"
-                value={name}
-                size="small"
-                onChange={(e) => setName(e.target.value)}
-              />
-            </Grid>
-            <Grid size={6}>
-              <TextField
-                label="Apellido"
-                value={surnames}
-                size="small"
-                onChange={(e) => setSurname(e.target.value)}
-              />
-            </Grid>
-            <Grid size={6}>
-              <TextField
-                label="Rol"
-                value={rol}
-                size="small"
-                onChange={(e) => setRol(e.target.value)}
-              />
-            </Grid>
-            <Grid size={6}>
-              <TextField
-                label="Teléfono"
-                value={phone}
-                size="small"
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </Grid>
-            <Grid size={6}>
-              <TextField
-                label="Correo"
-                value={mail}
-                size="small"
-                onChange={(e) => setMail(e.target.value)}
-              />
-            </Grid>
-            <Grid size={6}>
-              <TextField
-                label="Date"
-                value={date}
-                size="small"
-                type="date"
-                onChange={(e) => setDate(e.target.value)}
-              />
-            </Grid>
-          </Grid>
-          {/*Buttons*/}
-          <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
-            <Grid container spacing={2}>
-              <Grid item>
-                <Button onClick={handleClose} variant="contained" color="error">
-                  Cerrar
-                </Button>
+          {/*Inputs & buttons*/}
+          <form>
+            <Grid container spacing={1}>
+              <Grid item size={6}>
+                <TextField
+                  label="DNI"
+                  value={dni}
+                  size="small"
+                  onChange={(e) => setDni(e.target.value)}
+                  required
+                />
               </Grid>
-              <Grid item>
-                <Button onClick={createUser} variant="contained">
-                  Crear
-                </Button>
+              <Grid size={6}>
+                <TextField
+                  label="Contraseña"
+                  value={password}
+                  size="small"
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </Grid>
+              <Grid size={6}>
+                <TextField
+                  label="Nombre"
+                  value={name}
+                  size="small"
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </Grid>
+              <Grid size={6}>
+                <TextField
+                  label="Apellido"
+                  value={surnames}
+                  size="small"
+                  onChange={(e) => setSurname(e.target.value)}
+                  required
+                />
+              </Grid>
+              <Grid size={6}>
+                <TextField
+                  label="Rol"
+                  value={rol}
+                  size="small"
+                  onChange={(e) => setRol(e.target.value)}
+                  required
+                />
+              </Grid>
+              <Grid size={6}>
+                <TextField
+                  label="Teléfono"
+                  value={phone}
+                  size="small"
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                />
+              </Grid>
+              <Grid size={6}>
+                <TextField
+                  label="Correo"
+                  value={mail}
+                  size="small"
+                  onChange={(e) => setMail(e.target.value)}
+                  required
+                />
+              </Grid>
+              <Grid size={6}>
+                <TextField
+                  label="Date"
+                  value={date}
+                  size="small"
+                  type="date"
+                  onChange={(e) => setDate(e.target.value)}
+                  required
+                />
               </Grid>
             </Grid>
-          </Box>
+            <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
+              <Grid container spacing={2}>
+                <Grid item>
+                  <Button onClick={handleClose} variant="contained" color="error">
+                    Cerrar
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button onClick={createUser} variant="contained">
+                    Crear
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+          </form>
         </Box>
       </Modal>
-    </Box>
+
+      {/*Notification*/}
+      <Snackbar
+        open={snack.open}
+        onClose={() => setSnack({ open: false })}
+        autoHideDuration={6000}
+        message={snack.message}
+        key="top left"
+      />
+    </Box >
   );
 }
