@@ -89,7 +89,7 @@ export default function Users() {
       rol: rol,
       mail: mail,
       phone: phone,
-      admission_date: new Date(date)
+      admission_date: date
     };
     console.log("eyy", DATA);
 
