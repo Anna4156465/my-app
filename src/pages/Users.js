@@ -180,9 +180,9 @@ export default function Users() {
             return (
               <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                 {COLUMNS?.map((column) => {
-                  const value = row[column.id];
+                  const value = row[column.dni];
                   return (
-                    <TableCell key={column.id} align={column.align}>
+                    <TableCell key={column.dni} align={column.align}>
                       {column.format && typeof value === 'number'
                         ? column.format(value)
                         : value}
