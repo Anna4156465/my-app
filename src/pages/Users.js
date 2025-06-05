@@ -51,7 +51,7 @@ export default function Users() {
   const COLUMNS = [
     { id: 'dni', label: 'DNI', minWidth: 100 },
     { id: 'name', label: 'Nombre', minWidth: 100, },
-    { id: 'surname', label: 'Apellido', minWidth: 100, },
+    { id: 'surnames', label: 'Apellido', minWidth: 100, },
     { id: 'rol', label: 'Rol', minWidth: 100 },
     { id: 'mail', label: 'Mail', minWidth: 100 },
     { id: 'phone', label: 'Phone', minWidth: 100 },
@@ -68,7 +68,10 @@ export default function Users() {
 
   async function getUsers() {
     try {
-      const response = await fetch('http://127.0.0.1:5001/api/v1/users');
+      const response = await fetch('http://localhost:5001/api/v1/users', {
+        method: 'GET',
+        credentials: 'include'
+      });
       const jsonData = await response.json();
       console.log("eyy", jsonData);
       setData(jsonData);
@@ -206,12 +209,12 @@ export default function Users() {
           <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
             <Grid container spacing={2}>
               <Grid item>
-                <Button onClick={createUser} variant="contained">
-                  Crear
+                <Button onClick={handleClose} variant="contained" color="error">
+                  Cerrar
                 </Button>
               </Grid>
               <Grid item>
-                <Button onClick={handleClose} variant="contained" xs={{}}>
+                <Button onClick={createUser} variant="contained">
                   Crear
                 </Button>
               </Grid>
