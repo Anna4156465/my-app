@@ -83,13 +83,16 @@ export default function Users() {
     //Prepare body to send:
     const DATA = {
       dni: dni,
+      name: name,
       password: password,
       surnames: surnames,
       rol: rol,
       mail: mail,
       phone: phone,
-      admission_date: date
+      admission_date: new Date(date)
     };
+    console.log("eyy", DATA);
+
 
     try {
       const response = await fetch('http://localhost:5001/api/v1/users/', {
@@ -100,7 +103,7 @@ export default function Users() {
         body: JSON.stringify(DATA)
       });
       //Save data:
-      console.log("eey", response);
+      console.log("eeyy", response);
     } catch (error) { console.error('Error al obtener datos de la API:', error); }
   }
 
