@@ -268,15 +268,15 @@ export default function Pets() {
                 />
               </Grid>
               <Grid size={12}>
+                Propietario:
                 <Select
-                  label="Propietario"
                   value={customer}
                   onChange={(e) => setCustomer(e.target.value)}
                   fullWidth
                   size="small"
                   required
                 >
-                  {customers.map((item) => <MenuItem value={item.dni}>{item.dni}</MenuItem>)}
+                  {customers.length > 0 && customers.map((item) => <MenuItem value={item.dni}>{item.dni}</MenuItem>)}
                 </Select>
               </Grid>
             </Grid>

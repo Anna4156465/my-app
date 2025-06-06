@@ -3,7 +3,8 @@ import { DemoProvider, useDemoRouter } from '@toolpad/core/internal';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { createTheme } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Box, Button } from '@mui/material';
 import { useContext } from 'react';
 
 //Import the context for the global variables:
@@ -12,6 +13,7 @@ import UserContext from './index';
 //MUI icons imports:
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
 import GroupIcon from '@mui/icons-material/Group';
 import PetsIcon from '@mui/icons-material/Pets';
 
@@ -38,11 +40,30 @@ const demoTheme = createTheme({
   },
 });
 
+
+
 function DashboardLayoutBasic(props) {
+  const navigate = useNavigate();
+
   const { window } = props;
   const { rol } = useContext(UserContext);
   const router = useDemoRouter('/dashboard');
   const demoWindow = window !== undefined ? window() : undefined;
+
+  async function logout() {
+    try {
+      //Do the call:
+      const response = await fetch('http://localhost:5001/api/v1/auth/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        mode: 'cors',
+        credentials: "include",
+      });
+      if (response.status === 200) {
+        navigate('/');
+      }
+    } catch (error) { console.error('Error al obtener datos de la API:', error); }
+  }
 
   //List of tabs:
   const NAVIGATION = [
@@ -76,6 +97,17 @@ function DashboardLayoutBasic(props) {
     })
   }
 
+  NAVIGATION.push({
+    icon: <Button
+      startIcon={<LogoutIcon color="primary" />}
+      sx={{ width: '280px' }}
+      onClick={logout}
+    >
+      Cerrar
+    </Button>
+  })
+
+
   //Connect the pages to the tabs:
   function getPageComponent(pathname) {
     const path = pathname.slice(1);
@@ -105,6 +137,7 @@ function DashboardLayoutBasic(props) {
           </Box>
         </DashboardLayout>
       </AppProvider>
+
     </DemoProvider>
   );
 }
