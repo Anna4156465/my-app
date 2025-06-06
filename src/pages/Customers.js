@@ -1,6 +1,5 @@
 //React & MUI imports:
 import Snackbar from '@mui/material/Snackbar';
-import Select from '@mui/material/Select';
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -32,19 +31,18 @@ const style = {
   p: 4,
 };
 
-export default function Pets() {
+export default function Customers() {
   //Data obtained from the API:
   const [data, setData] = useState([]);
 
-  //Data for the new pet (crate pet):
-  const [chip, setChip] = React.useState("");
+  //Data for the new customer (create customer):
+  const [dni, setDni] = React.useState("");
+  const [surnames, setSurname] = React.useState("");
   const [name, setName] = React.useState("");
-  const [date, setDate] = React.useState("");
-  const [animal, setAnimal] = React.useState("");
-  const [breed, setBreed] = React.useState("");
-  const [customer, setCustomer] = React.useState("");
+  const [mail, setMail] = React.useState("");
+  const [phone, setPhone] = React.useState("");
 
-  //Trigger for the create pet pop-up:
+  //Trigger for the create customer pop-up:
   const [open, setOpen] = React.useState(false);
 
   //Toggle show notification:
@@ -52,36 +50,33 @@ export default function Pets() {
 
   //Columns of the table:
   const COLUMNS = [
-    { id: 'num_chip', label: 'Chip', minWidth: 50 },
+    { id: 'dni', label: 'DNI', minWidth: 50 },
     { id: 'name', label: 'Nombre', minWidth: 50, },
-    { id: 'birth_date', label: 'Fecha de nacimiento', minWidth: 50, },
-    { id: 'animal', label: 'Animal', minWidth: 50 },
-    { id: 'breed', label: 'Raza', minWidth: 50 },
-    { id: 'customer_id', label: 'Propietario', minWidth: 50 },
+    { id: 'surnames', label: 'Apellido', minWidth: 50, },
+    { id: 'mail', label: 'Correo', minWidth: 50 },
+    { id: 'phone', label: 'Teléfono', minWidth: 50 }
   ];
 
   //Do this when the page load:
   useEffect(() => {
-    getPets();
-    //TODO
+    getCustomers();
   }, []);
 
   //Handle functions for the pop-up:
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setChip("");
+    setDni("");
+    setSurname("");
     setName("");
-    setDate("");
-    setAnimal("");
-    setBreed("");
-    setCustomer("");
+    setMail("");
+    setPhone("");
   };
 
-  async function getPets() {
+  async function getCustomers() {
     try {
       //Do the call:
-      const response = await fetch('http://localhost:5001/api/v1/pets', {
+      const response = await fetch('http://localhost:5001/api/v1/customers', {
         method: 'GET',
         credentials: 'include'
       });
@@ -93,20 +88,19 @@ export default function Pets() {
     }
   }
 
-  async function createPet() {
+  async function createCustomer() {
     //Prepare body to send:
     const DATA = {
-      num_chip: chip,
+      dni: dni,
       name: name,
-      birth_date: date,
-      animal: animal,
-      breed: breed,
-      customer_id: customer,
+      surnames: surnames,
+      mail: mail,
+      phone: phone,
     };
 
     try {
       //Do the call:
-      const response = await fetch('http://localhost:5001/api/v1/pets/', {
+      const response = await fetch('http://localhost:5001/api/v1/customers/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: "include",
@@ -116,26 +110,26 @@ export default function Pets() {
       //Save and upload data:
       if (response.status === 201) {
         setData([...data, DATA]);
-        setSnack({ open: true, message: "Mascota creada!" });
+        setSnack({ open: true, message: "Cliente creado!" });
         handleClose();
       }
       else if (response.status == 409) {
-        setSnack({ open: true, message: "La mascota ya existe!" });
+        setSnack({ open: true, message: "El cliente ya existe!" });
       }
     } catch (error) { console.error('Error al obtener datos de la API:', error); }
   }
 
-  async function deletePet(chip) {
+  async function deleteCustomer(dni) {
     try {
       //Do the call:
-      const response = await fetch('http://localhost:5001/api/v1/pets/' + chip, {
+      const response = await fetch('http://localhost:5001/api/v1/customers/' + dni, {
         method: 'DELETE',
         credentials: "include",
       });
       //Upload data:
       if (response.status === 200) {
-        setData(data.filter((item) => item.num_chip !== chip));
-        setSnack({ open: true, message: "Mascota eliminada!" });
+        setData(data.filter((item) => item.dni !== dni));
+        setSnack({ open: true, message: "Cliente eliminado!" });
       }
       else setSnack({ open: true, message: "Ha habido un error!" });
     } catch (error) { console.error('Error al obtener datos de la API:', error); }
@@ -147,7 +141,7 @@ export default function Pets() {
       <Grid container spacing={2} alignItems="center">
         <Grid item sx={{ marginTop: "10px" }}>
           <Typography variant="h4" gutterBottom>
-            Mascotas
+            Clientes
           </Typography>
         </Grid>
         <Grid item>
@@ -173,7 +167,6 @@ export default function Pets() {
         </TableHead>
         <TableBody>
           {data.length > 0 && data.map((row) => {
-            console.log(row)
             return (
               <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                 {COLUMNS?.map((column) => {
@@ -187,7 +180,7 @@ export default function Pets() {
                   );
                 })}
                 <TableCell key={999}>
-                  <Button color="error" onClick={() => deletePet(row.num_chip)}> Borrar! </Button>
+                  <Button color="error" onClick={() => deleteCustomer(row.dni)}> Borrar! </Button>
                 </TableCell>
               </TableRow>
             );
@@ -199,16 +192,16 @@ export default function Pets() {
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           {/*Title*/}
-          <Typography variant="h6" sx={{ marginBottom: "10px" }}>Crear mascota</Typography>
+          <Typography variant="h6" sx={{ marginBottom: "10px" }}>Crear cliente</Typography>
           {/*Inputs & buttons*/}
           <form>
             <Grid container spacing={1}>
-              <Grid item size={6}>
+              <Grid item size={12}>
                 <TextField
-                  label="Chip"
-                  value={chip}
+                  label="DNI"
+                  value={dni}
                   size="small"
-                  onChange={(e) => setChip(e.target.value)}
+                  onChange={(e) => setDni(e.target.value)}
                   required
                 />
               </Grid>
@@ -223,38 +216,28 @@ export default function Pets() {
               </Grid>
               <Grid size={6}>
                 <TextField
-                  label="Animal"
-                  value={animal}
+                  label="Apellido"
+                  value={surnames}
                   size="small"
-                  onChange={(e) => setAnimal(e.target.value)}
+                  onChange={(e) => setSurname(e.target.value)}
                   required
                 />
               </Grid>
               <Grid size={6}>
                 <TextField
-                  label="Raza"
-                  value={breed}
+                  label="Teléfono"
+                  value={phone}
                   size="small"
-                  onChange={(e) => setBreed(e.target.value)}
+                  onChange={(e) => setPhone(e.target.value)}
                   required
                 />
               </Grid>
               <Grid size={6}>
                 <TextField
-                  label="Fecha de nacimiento"
-                  value={date}
+                  label="Correo"
+                  value={mail}
                   size="small"
-                  type="date"
-                  onChange={(e) => setDate(e.target.value)}
-                  required
-                />
-              </Grid>
-              <Grid size={6}>
-                <TextField
-                  label="Propietario"
-                  value={customer}
-                  size="small"
-                  onChange={(e) => setCustomer(e.target.value)}
+                  onChange={(e) => setMail(e.target.value)}
                   required
                 />
               </Grid>
@@ -267,7 +250,7 @@ export default function Pets() {
                   </Button>
                 </Grid>
                 <Grid item>
-                  <Button onClick={createPet} variant="contained">
+                  <Button onClick={createCustomer} variant="contained">
                     Crear
                   </Button>
                 </Grid>

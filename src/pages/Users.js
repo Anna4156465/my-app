@@ -180,9 +180,9 @@ export default function Users() {
             return (
               <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                 {COLUMNS?.map((column) => {
-                  const value = row[column.dni];
+                  const value = row[column.id];
                   return (
-                    <TableCell key={column.dni} align={column.align}>
+                    <TableCell key={column.id} align={column.align}>
                       {column.format && typeof value === 'number'
                         ? column.format(value)
                         : value}
@@ -202,7 +202,7 @@ export default function Users() {
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           {/*Title*/}
-          <Typography variant="h6" sx={{ marginBottom: "10px" }}>Create user</Typography>
+          <Typography variant="h6" sx={{ marginBottom: "10px" }}>Crear usuario</Typography>
           {/*Inputs & buttons*/}
           <form>
             <Grid container spacing={1}>

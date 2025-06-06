@@ -11,6 +11,7 @@ import UserContext from './index';
 
 //MUI icons imports:
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import SettingsIcon from '@mui/icons-material/Settings';
 import GroupIcon from '@mui/icons-material/Group';
 import PetsIcon from '@mui/icons-material/Pets';
 
@@ -18,6 +19,7 @@ import PetsIcon from '@mui/icons-material/Pets';
 import Users from './pages/Users';
 import Pets from './pages/Pets';
 import Appointments from './pages/Appointments';
+import Customers from './pages/Customers';
 
 //Theme & styles:
 const demoTheme = createTheme({
@@ -49,6 +51,11 @@ function DashboardLayoutBasic(props) {
       title: 'Main items',
     },
     {
+      segment: 'customers',
+      title: 'Clientes',
+      icon: <GroupIcon />,
+    },
+    {
       segment: 'pets',
       title: 'Mascotas',
       icon: <PetsIcon />,
@@ -65,7 +72,7 @@ function DashboardLayoutBasic(props) {
     NAVIGATION.push({
       segment: 'users',
       title: 'Empleados',
-      icon: <GroupIcon />,
+      icon: <Customers />,
     })
   }
 
@@ -75,6 +82,8 @@ function DashboardLayoutBasic(props) {
     switch (path) {
       case 'users':
         return <Users />;
+      case 'customers':
+        return <Customers />;
       case 'pets':
         return <Pets />;
       case 'appointments':
