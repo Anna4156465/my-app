@@ -161,7 +161,6 @@ export default function Appointments() {
   }
 
   async function deleteAppointment(id) {
-    console.log("eyy2", id);
     try {
       //Do the call:
       const response = await fetch('http://localhost:5001/api/v1/appointments/' + parseInt(id), {
@@ -169,7 +168,6 @@ export default function Appointments() {
         credentials: "include",
       });
       //Upload data:
-      console.log("eyy", response);
       if (response.status === 200) {
         setData(data.filter((item) => item.id !== id));
         setSnack({ open: true, message: "Cita eliminada!" });
