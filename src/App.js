@@ -72,7 +72,7 @@ function DashboardLayoutBasic(props) {
     NAVIGATION.push({
       segment: 'users',
       title: 'Empleados',
-      icon: <Customers />,
+      icon: <SettingsIcon />,
     })
   }
 

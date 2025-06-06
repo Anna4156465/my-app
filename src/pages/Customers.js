@@ -203,6 +203,7 @@ export default function Customers() {
                   size="small"
                   onChange={(e) => setDni(e.target.value)}
                   required
+                  fullWidth 
                 />
               </Grid>
               <Grid size={6}>

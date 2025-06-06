@@ -1,11 +1,11 @@
 //React & MUI imports:
 import Snackbar from '@mui/material/Snackbar';
-import Select from '@mui/material/Select';
 import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
   Modal,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -14,7 +14,8 @@ import {
   Typography,
   TextField,
   Grid,
-  IconButton
+  IconButton,
+  MenuItem
 } from "@mui/material";
 
 //MUI icons imports:
@@ -35,6 +36,7 @@ const style = {
 export default function Pets() {
   //Data obtained from the API:
   const [data, setData] = useState([]);
+  const [customers, setCustomers] = useState([]);
 
   //Data for the new pet (crate pet):
   const [chip, setChip] = React.useState("");
@@ -63,7 +65,7 @@ export default function Pets() {
   //Do this when the page load:
   useEffect(() => {
     getPets();
-    //TODO
+    getCustomers();
   }, []);
 
   //Handle functions for the pop-up:
@@ -88,6 +90,21 @@ export default function Pets() {
       //Save data:
       const jsonData = await response.json();
       setData(jsonData);
+    } catch (error) {
+      console.error('Error al obtener datos de la API:', error);
+    }
+  }
+
+  async function getCustomers() {
+    try {
+      //Do the call:
+      const response = await fetch('http://localhost:5001/api/v1/customers', {
+        method: 'GET',
+        credentials: 'include'
+      });
+      //Save data:
+      const jsonData = await response.json();
+      setCustomers(jsonData);
     } catch (error) {
       console.error('Error al obtener datos de la API:', error);
     }
@@ -173,7 +190,6 @@ export default function Pets() {
         </TableHead>
         <TableBody>
           {data.length > 0 && data.map((row) => {
-            console.log(row)
             return (
               <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                 {COLUMNS?.map((column) => {
@@ -203,13 +219,14 @@ export default function Pets() {
           {/*Inputs & buttons*/}
           <form>
             <Grid container spacing={1}>
-              <Grid item size={6}>
+              <Grid item size={12}>
                 <TextField
                   label="Chip"
                   value={chip}
                   size="small"
                   onChange={(e) => setChip(e.target.value)}
                   required
+                  fullWidth
                 />
               </Grid>
               <Grid size={6}>
@@ -247,16 +264,20 @@ export default function Pets() {
                   type="date"
                   onChange={(e) => setDate(e.target.value)}
                   required
+                  fullWidth
                 />
               </Grid>
-              <Grid size={6}>
-                <TextField
+              <Grid size={12}>
+                <Select
                   label="Propietario"
                   value={customer}
-                  size="small"
                   onChange={(e) => setCustomer(e.target.value)}
+                  fullWidth
+                  size="small"
                   required
-                />
+                >
+                  {customers.map((item) => <MenuItem value={item.dni}>{item.dni}</MenuItem>)}
+                </Select>
               </Grid>
             </Grid>
             <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
