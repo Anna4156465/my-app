@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom/client';
 
 //Pages imports:
 import App from './App';
-import Login from './pages/Login'
+import Login from './Login'
 
 //Create context for global variables:
 const UserContext = createContext();

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 
 //Import the context for the global variables:
-import UserContext from '../index';
+import UserContext from './index';
 
 export default function Login() {
   const navigate = useNavigate();
