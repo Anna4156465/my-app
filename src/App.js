@@ -4,7 +4,7 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { createTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Card, CardContent, Typography } from '@mui/material';
 import { useContext } from 'react';
 
 //Import the context for the global variables:
@@ -124,21 +124,52 @@ function DashboardLayoutBasic(props) {
   }
 
   return (
-    <DemoProvider window={demoWindow}>
-      <AppProvider
-        navigation={NAVIGATION}
-        router={router}
-        theme={demoTheme}
-        window={demoWindow}
-      >
-        <DashboardLayout>
-          <Box sx={{ flexGrow: 1 }}>
-            {getPageComponent(router.pathname)}
-          </Box>
-        </DashboardLayout>
-      </AppProvider>
+    rol !== "" ? (
+      <DemoProvider window={demoWindow}>
+        <AppProvider
+          navigation={NAVIGATION}
+          router={router}
+          theme={demoTheme}
+          window={demoWindow}
+        >
+          <DashboardLayout>
+            <Box sx={{ flexGrow: 1 }}>
+              {getPageComponent(router.pathname)}
+            </Box>
+          </DashboardLayout>
+        </AppProvider>
 
-    </DemoProvider>
+      </DemoProvider>
+    ) :
+      (
+        <Box
+          sx={{
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            bgcolor: 'background.default'
+          }}
+        >
+          <Card sx={{ maxWidth: 400, width: '100%', mx: 2 }}>
+            <CardContent sx={{ p: 4 }}>
+              {/*Title*/}
+              <Typography variant="h4" component="h1" gutterBottom align="center">
+                Ha habido un error
+              </Typography>
+              <Button
+                onClick={() => navigate('/')}
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3 }}
+                size="large"
+              >
+                Volver a iniciar sesión
+              </Button>
+            </CardContent>
+          </Card>
+        </Box>
+      )
   );
 }
 
