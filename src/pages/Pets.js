@@ -265,6 +265,9 @@ export default function Pets() {
                   onChange={(e) => setDate(e.target.value)}
                   required
                   fullWidth
+                   InputLabelProps={{
+                    shrink: true, // Para que el label no se superponga al valor
+                  }}
                 />
               </Grid>
               <Grid size={12}>

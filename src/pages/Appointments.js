@@ -41,7 +41,6 @@ export default function Appointments() {
 
 
   //Data for the new user (crate user):
-  const [id, setId] = React.useState("");
   const [type, setType] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [date, setDate] = React.useState("");
@@ -251,7 +250,10 @@ export default function Appointments() {
                   onChange={(e) => setDate(e.target.value)}
                   required
                   fullWidth
-                  type="date"
+                  type="datetime-local"
+                  InputLabelProps={{
+                    shrink: true, // Para que el label no se superponga al valor
+                  }}
                 />
               </Grid>
               <Grid size={12}>

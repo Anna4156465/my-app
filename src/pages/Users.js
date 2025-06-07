@@ -244,15 +244,6 @@ export default function Users() {
               </Grid>
               <Grid size={6}>
                 <TextField
-                  label="Rol"
-                  value={rol}
-                  size="small"
-                  onChange={(e) => setRol(e.target.value)}
-                  required
-                />
-              </Grid>
-              <Grid size={6}>
-                <TextField
                   label="Teléfono"
                   value={phone}
                   size="small"
@@ -271,12 +262,25 @@ export default function Users() {
               </Grid>
               <Grid size={6}>
                 <TextField
-                  label="Date"
+                  label="Rol"
+                  value={rol}
+                  size="small"
+                  onChange={(e) => setRol(e.target.value)}
+                  required
+                />
+              </Grid>
+              <Grid size={6}>
+                <TextField
+                  label="Fecha de admisión"
                   value={date}
                   size="small"
                   type="date"
                   onChange={(e) => setDate(e.target.value)}
                   required
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true, // Para que el label no se superponga al valor
+                  }}
                 />
               </Grid>
             </Grid>
