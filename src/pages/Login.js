@@ -76,9 +76,13 @@ export default function Login() {
     >
       <Card sx={{ maxWidth: 400, width: '100%', mx: 2 }}>
         <CardContent sx={{ p: 4 }}>
+          {/*Logo*/}
+          <Box display="flex" justifyContent="center">
+            <img src="/VetApi-logo-SinFondo.png" width={200} alt="Logo" />
+          </Box>
           {/*Title*/}
           <Typography variant="h4" component="h1" gutterBottom align="center">
-            Iniciar sesión
+            Veterinarios App
           </Typography>
           {/*Inputs, alert & button*/}
           <form onSubmit={handleSubmit}>
@@ -109,7 +113,7 @@ export default function Login() {
               sx={{ mt: 3 }}
               size="large"
             >
-              Entrar
+              Iniciar sesión
             </Button>
           </form>
         </CardContent>

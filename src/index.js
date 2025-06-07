@@ -1,6 +1,6 @@
 //React imports:
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import React, { useState, createContext } from 'react';
+import { useState, createContext } from 'react';
 import ReactDOM from 'react-dom/client';
 
 //Pages imports:

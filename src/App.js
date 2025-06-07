@@ -5,7 +5,7 @@ import { AppProvider } from '@toolpad/core/AppProvider';
 import { createTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Card, CardContent, Typography } from '@mui/material';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 
 //Import the context for the global variables:
 import UserContext from './index';
@@ -42,8 +42,6 @@ const demoTheme = createTheme({
   },
 });
 
-
-
 function DashboardLayoutBasic(props) {
   const navigate = useNavigate();
 
@@ -51,6 +49,22 @@ function DashboardLayoutBasic(props) {
   const { rol } = useContext(UserContext);
   const router = useDemoRouter('/dashboard');
   const demoWindow = window !== undefined ? window() : undefined;
+
+  //Add the name app and the logo:
+  useEffect(() => {
+    const el = document.querySelector('.toolpad-demo-app-1t2rogw-MuiTypography-root');
+    if (el) el.textContent = 'Veterinarios App';
+
+    const s = document.querySelector('.toolpad-demo-app-9z93tp');
+    if (s) {
+      s.textContent = '';
+      const img = document.createElement('img');
+      img.src = '/VetApi-logo-SinFondo.png';
+      img.width = 40;
+      img.height = 40;
+      s.appendChild(img);
+    }
+  }, []);
 
   async function logout() {
     try {
@@ -69,10 +83,6 @@ function DashboardLayoutBasic(props) {
 
   //List of tabs:
   const NAVIGATION = [
-    {
-      kind: 'header',
-      title: 'Main items',
-    },
     {
       segment: 'calendar',
       title: 'Calendario',
@@ -135,7 +145,7 @@ function DashboardLayoutBasic(props) {
 
   return (
     rol !== "" ? (
-      <DemoProvider window={demoWindow}>
+      <DemoProvider window={demoWindow} >
         <AppProvider
           navigation={NAVIGATION}
           router={router}
