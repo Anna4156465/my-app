@@ -56,7 +56,6 @@ export default function Appointments() {
 
   //Columns of the table:
   const COLUMNS = [
-    { id: 'id', label: 'ID', minWidth: 50 },
     { id: 'type', label: 'Tipo', minWidth: 50, },
     { id: 'description', label: 'Descripción', minWidth: 50, },
     { id: 'date', label: 'Fecha', minWidth: 50, },
@@ -75,7 +74,6 @@ export default function Appointments() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setId("");
     setType("");
     setDescription("");
     setUser("");
@@ -131,7 +129,6 @@ export default function Appointments() {
   async function createAppointment() {
     //Prepare body to send:
     const DATA = {
-      id: id,
       type: type,
       description: description,
       date: date,
@@ -237,15 +234,6 @@ export default function Appointments() {
           {/*Inputs & buttons*/}
           <form>
             <Grid container spacing={1}>
-              <Grid item size={6}>
-                <TextField
-                  label="ID"
-                  value={id}
-                  size="small"
-                  onChange={(e) => setId(e.target.value)}
-                  required
-                />
-              </Grid>
               <Grid size={6}>
                 <TextField
                   label="Tipo"
@@ -253,6 +241,17 @@ export default function Appointments() {
                   size="small"
                   onChange={(e) => setType(e.target.value)}
                   required
+                />
+              </Grid>
+              <Grid size={6}>
+                <TextField
+                  label="Fecha"
+                  value={date}
+                  size="small"
+                  onChange={(e) => setDate(e.target.value)}
+                  required
+                  fullWidth
+                  type="date"
                 />
               </Grid>
               <Grid size={12}>
@@ -263,17 +262,6 @@ export default function Appointments() {
                   onChange={(e) => setDescription(e.target.value)}
                   required
                   fullWidth
-                />
-              </Grid>
-              <Grid size={12}>
-                <TextField
-                  label="Date"
-                  value={date}
-                  size="small"
-                  onChange={(e) => setDate(e.target.value)}
-                  required
-                  fullWidth
-                  type="date"
                 />
               </Grid>
               <Grid size={6}>
