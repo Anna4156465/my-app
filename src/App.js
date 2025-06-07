@@ -89,6 +89,11 @@ function DashboardLayoutBasic(props) {
       icon: <CalendarMonthIcon />,
     },
     {
+      segment: 'appointments',
+      title: 'Citas',
+      icon: <ScheduleIcon />,
+    },
+    {
       segment: 'customers',
       title: 'Clientes',
       icon: <GroupIcon />,
@@ -97,11 +102,6 @@ function DashboardLayoutBasic(props) {
       segment: 'pets',
       title: 'Mascotas',
       icon: <PetsIcon />,
-    },
-    {
-      segment: 'appointments',
-      title: 'Citas',
-      icon: <ScheduleIcon />,
     },
   ];
 
